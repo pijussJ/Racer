@@ -11,12 +11,15 @@ public class Vehicle : MonoBehaviour
 	public float drag;
 	public bool isGrounded;
 	public Transform visualsTransform;
+	public float speedRatio;
 
 	void Update()
 	{
 		isGrounded = Physics.Raycast( transform.position, Vector3.down,out var hit,0.6f);
-		var angle = Vector3.SignedAngle(Vector3.up,hit.normal, Vector3.right);
-		visualsTransform.localEulerAngles = new Vector3(angle, 0, 0);
+		var targetAngle = Vector3.SignedAngle(Vector3.up,hit.normal, Vector3.right);
+
+		var newAngle = Mathf.LerpAngle(visualsTransform.localEulerAngles.x, targetAngle, 0.01f);
+		visualsTransform.localEulerAngles = new Vector3(newAngle, 0, 0);
 
 		var sideFriction = Vector3.Dot(transform.right, rb.velocity.normalized);
 		rb.velocity += -transform.right * sideFriction * rb.velocity.magnitude * sideDrag * Time.deltaTime;
@@ -31,7 +34,7 @@ public class Vehicle : MonoBehaviour
 		}
 
 
-		var speedRatio = rb.velocity.magnitude / maxSpeed;
+		speedRatio = rb.velocity.magnitude / maxSpeed;
 		engineSound.pitch = 0.5f + 1.5f*speedRatio;
 	}
 
