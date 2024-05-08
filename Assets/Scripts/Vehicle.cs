@@ -26,6 +26,10 @@ public class Vehicle : MonoBehaviour
         {
             print("drift");
         }
+
+        // DRAG
+        rb.velocity += -transform.forward * localVelocity.z * 0.1f * Time.deltaTime;
+        rb.velocity += -transform.right * localVelocity.x * 1 * Time.deltaTime;
     }
 
 
