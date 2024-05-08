@@ -2,26 +2,43 @@ using UnityEngine;
 
 public class Vehicle : MonoBehaviour
 {
-    public float speed = 10f;
+    public float maxSpeed = 10f;
+    public float maxReverseSpeed = 5f;
+    public float acceleration = 5f;
+    public float brakeAcceleration = 10f;
     public float turnSpeed = 10f;
     public AudioSource engineSound;
     public Rigidbody rb;
+    public AnimationCurve pitchCurve;
+    public Vector3 localVelocity;
+
 
     void Update()
     {
         print( rb.velocity.magnitude * 3.6f + " km/h");
-        engineSound.pitch = 1 + rb.velocity.magnitude * 0.2f;
+
+        var speedRatio = rb.velocity.magnitude / maxSpeed;
+        engineSound.pitch = pitchCurve.Evaluate(speedRatio);
+
+        localVelocity = transform.InverseTransformVector(rb.velocity);
+
+        if (localVelocity.x < -1 || localVelocity.x > 1)
+        {
+            print("drift");
+        }
     }
+
 
     public void Brake()
     {
-
+        if (localVelocity.z < -maxReverseSpeed) return;
+        rb.velocity += transform.forward * -brakeAcceleration * Time.deltaTime;
     }
 
     public void Gas()
     {
-        rb.velocity = transform.forward * speed;
-        //rb.velocity += transform.forward * speed * Time.deltaTime;
+        if (localVelocity.z > maxSpeed) return;
+        rb.velocity += transform.forward * acceleration * Time.deltaTime;
     }
 
     public void Turn(float amount)
