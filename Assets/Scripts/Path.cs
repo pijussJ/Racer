@@ -13,7 +13,7 @@ public class Path : MonoBehaviour
 
 	public int GetNextIndex(int i)
 	{
-		 if(i >= waypoints.Count) return 0;
+		 if(i >= waypoints.Count-1) return 0;
 		 if(i < 0) return waypoints.Count - 1;
 		 else return i + 1;
 	}

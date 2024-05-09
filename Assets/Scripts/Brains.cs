@@ -28,6 +28,8 @@ public class Brains : MonoBehaviour
 
         var nextPointDir = (nextPoint - transform.position).normalized;
         var dir = Vector3.SignedAngle(transform.forward, nextPointDir, Vector3.up);
+
+
         vehicle.Turn(dir);
         vehicle.Accelerate();
     }
