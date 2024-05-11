@@ -15,7 +15,7 @@ public class Vehicle : MonoBehaviour
 
     void Update()
     {
-        print( rb.velocity.magnitude * 3.6f + " km/h");
+        //print( rb.velocity.magnitude * 3.6f + " km/h");
 
         var speedRatio = rb.velocity.magnitude / maxSpeed;
         engineSound.pitch = pitchCurve.Evaluate(speedRatio);
@@ -47,6 +47,7 @@ public class Vehicle : MonoBehaviour
 
     public void Turn(float amount)
     {
+        amount = Mathf.Clamp(amount, -1, 1);
         transform.Rotate(0, amount * turnSpeed  * Time.deltaTime, 0);
     }
 }
